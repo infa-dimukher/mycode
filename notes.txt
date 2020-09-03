@@ -1,0 +1,42 @@
+POINTS TO NOTE
+------------------------------------
+- UID: system variable: user id
+- $? : Store the exit status (exit 1, exit 0)
+- $# : Number of arguments passed
+- $@ : Take each command line argument separated by space; useful for running a for loop with every command line argument
+- $* : Take all the command line arguments as one argument
+- == equal sign enforces pattern matching inside if block
+- RANDOM variable will generate a random number between 0 to 32767 .e.g. echo ${RANDOM}
+  positional parameters: $0 $1 $2 .. so on.. $0 stores the command which is executed and likewise $1 represents the first argument which is passed with the command, $2 represents 2nd argument and so on
+- () command substitution parenthesis
+- usage of shift in while loop
+- File descriptors:: FD0 (standard input), FD1 (standard output), FD2 (standard Error)
+- logger
+- /tmp/ files are not guaranteed to survive a reboot and gets cleared very often whereas /var/tmp files have longer life
+- cp command with -p option preserves the timestamps and other details while making the copy
+- getopts ($OPTARD and $OPTIND)
+- arithmetic expansion: echo $(( 1+2 )) will output 3
+- let : shell builtin
+- expr
+- hash
+- sudo updatedb; locate
+- sudo !! [this actually executes the last command with sudo privilege]
+
+Shell scripts to write
+--------------------------------
+create a shell script using a shell script & remove that
+how to turn off all the standard output if verbose is set as false
+How to create a readonly file in shell script
+how can I set permissions to multiple groups for a single file
+
+
+New commands learned
+------------------------
+curl -s ifconfig.me
+sha1sum,sha256sum
+head
+type -a
+shuf
+fold
+hash -r
+basename/dirname
