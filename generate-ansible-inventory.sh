@@ -1,6 +1,7 @@
 #!/bin/bash
 : > inventory.txt
 region=$1
+aws ec2 describe-instances --filter ""Name=tag:Name,Values=MDM-*"" --query Reservations[].Instances[].Tags | grep -A1 -B1 Name | grep Value | grep -v -e '-ASG-' | awk -F ':' '{print $2}' | sed 's/"//g' | sed 's/,//g' | sed 's/ //g' | awk -F '-' '{print $2}' | sort -u  | grep -iv bastion > customer_list.txt
 _ENV="qa prod"
 for env in $_ENV
 do
