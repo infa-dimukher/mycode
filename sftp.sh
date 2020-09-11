@@ -1,5 +1,6 @@
 #!/bin/bash
-
+target_dir=/monitoring/cre
+[ ! -d "${target_dir}" ] && sudo mkdir -p ${target_dir}
 expect << 'EOS'
 spawn sftp tsftp@tsftp.informatica.com:/Home/tsftp/vignesh/final_scripts
 expect "Password:"
