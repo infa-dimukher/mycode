@@ -33,4 +33,6 @@ echo -e "\n# APP Servers\n[app]" >> inventory.txt
 cat inventory.txt | grep APP | awk '{print $1}' >> inventory.txt
 echo -e "\n# VIBE Servers\n[vibe]" >> inventory.txt
 cat inventory.txt | grep VIBE | awk '{print $1}' >> inventory.txt
+echo -e "\n# Smart Search Servers\n[ss]" >> inventory.txt
+cat inventory.txt | grep SS | awk '{print $1}' >> inventory.txt
 exit 0
