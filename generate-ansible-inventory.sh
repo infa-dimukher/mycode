@@ -24,4 +24,12 @@ do
         fi
     done
 done
+echo -e "\n# QA Servers\n[qa]" >> inventory.txt
+cat inventory.txt | grep qa | awk '{print $1}' >> inventory.txt
+echo -e "\n# PROD Servers\n[prod]" >> inventory.txt
+cat inventory.txt | grep prod | awk '{print $1}' >> inventory.txt
+echo -e "\n# APP Servers\n[app]" >> inventory.txt
+cat inventory.txt | grep APP | awk '{print $1}' >> inventory.txt
+echo -e "\n# VIBE Servers\n[vibe]" >> inventory.txt
+cat inventory.txt | grep VIBE | awk '{print $1}' >> inventory.txt
 exit 0
