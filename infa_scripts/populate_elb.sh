@@ -6,6 +6,6 @@ do
   echo "# ${region} MDM Load balancers" >> elb_list.txt
   echo -e "---------------------------------------------------" >> elb_list.txt
   aws elb describe-load-balancers --region ${region} | grep LoadBalancerName | awk '{print $2}' | grep mdm- | sed 's/,//' | sed 's/"//g' >> elb_list.txt
-  echo -e "\n"
+  echo -e "\n" >> elb_list.txt
 done
 exit 0
