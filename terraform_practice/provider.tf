@@ -8,6 +8,10 @@ terraform {
       source = "hashicorp/tls"
       version = "4.0.4"
     }
+  vault = {
+      source = "hashicorp/vault"
+      version = "3.20.1"
+    }
   }
 }
 
@@ -17,3 +21,15 @@ provider "aws" {
 
 
 provider "tls" {}
+
+
+provider "vault" {
+  address = "http://54.162.226.10:8200"
+  auth_login {
+    path = "auth/aws/login"
+    method = "aws"
+    parameters = {
+      role = "dev-role-iam"
+    }
+  }
+}
