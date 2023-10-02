@@ -1,0 +1,9 @@
+Practice Lab tasks
+---------------------
+- Create an org in tf cloud
+- Launch a sandbox in aws
+- Use terraform to create VPC and its components (public and private subnets, route tables, IGW, NAT-GW, NACLs)
+- Use terraform to create 4 EC2, RDS (MySQL), 2 SG, 1 ELB, 1 DNS. Create modules and variables, trigger provisioning using main.tf, all these resources need to be created in the above VPC
+- Provision EKS cluster with node pool and run helm charts to run jenkins pod. Expose jenkins url using Route53 via terraform
+- Bootstrap another EC2 instance in private subnet with required tools to access EKS cluster. All through terraform, userdata/ansible
+- Set up prometheus and Alert manager in Kube cluster and configure metrics sharing through AWS SNS
