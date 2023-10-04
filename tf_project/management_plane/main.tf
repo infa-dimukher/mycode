@@ -4,8 +4,9 @@ resource "tls_private_key" "ec2_ssh_key" {
 }
 
 resource "local_file" "ec2_private_key" {
-  content  = tls_private_key.ec2_ssh_key.private_key_openssh
-  filename = "./ec2_private_key.pem"
+  content         = tls_private_key.ec2_ssh_key.private_key_openssh
+  filename        = "./ec2_private_key.pem"
+  file_permission = "0400"
 }
 
 output "ec2_ssh_key" {
@@ -14,7 +15,8 @@ output "ec2_ssh_key" {
 }
 
 resource "aws_vpc" "tf_project" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
 
   tags = {
     Name = "tf_vpc"
@@ -32,14 +34,16 @@ resource "aws_internet_gateway" "internetgw" {
 resource "aws_route_table" "tf_route_table" {
   vpc_id = aws_vpc.tf_project.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.internetgw.id
-  }
-
   tags = {
     Name = "tf-route-table"
   }
+}
+
+resource "aws_route" "tf_route_entry" {
+  route_table_id         = aws_route_table.tf_route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.internetgw.id
+  depends_on             = [aws_route_table.tf_route_table]
 }
 
 resource "aws_subnet" "tf_subnet" {
@@ -49,6 +53,11 @@ resource "aws_subnet" "tf_subnet" {
   tags = {
     Name = "tf_subnet"
   }
+}
+
+resource "aws_route_table_association" "tf_route_attach" {
+  subnet_id      = aws_subnet.tf_subnet.id
+  route_table_id = aws_route_table.tf_route_table.id
 }
 
 data "aws_ami" "get_ami" {
@@ -62,11 +71,12 @@ data "aws_ami" "get_ami" {
 }
 
 resource "aws_instance" "demo" {
-  ami           = data.aws_ami.get_ami.id
-  instance_type = var.instance_type
-  subnet_id     = aws_subnet.tf_subnet.id
-  count         = var.instance_count
-  key_name      = aws_key_pair.demokeypair.key_name
+  ami                         = data.aws_ami.get_ami.id
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.tf_subnet.id
+  count                       = var.instance_count
+  key_name                    = aws_key_pair.demokeypair.key_name
+  associate_public_ip_address = true
 
   tags = {
     Name = count.index == 0 ? "vault-admin" : "management_node"
@@ -77,6 +87,10 @@ resource "aws_instance" "demo" {
 resource "aws_key_pair" "demokeypair" {
   key_name   = var.key_pair_name
   public_key = tls_private_key.ec2_ssh_key.public_key_openssh
+}
+
+output "ec2_public_ip" {
+  value = aws_instance.demo[*].public_ip
 }
 
 # resource "vault_aws_secret_backend" "aws" {
