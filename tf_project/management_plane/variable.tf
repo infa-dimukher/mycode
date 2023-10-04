@@ -3,9 +3,9 @@ variable "project_name" {
   default = "dynamic_aws_creds_demo"
 }
 
-variable "aws_access_key" {}
+# variable "aws_access_key" {}
 
-variable "aws_secret_key" {}
+# variable "aws_secret_key" {}
 
 variable "ami_id" {
   type    = string
