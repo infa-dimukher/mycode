@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/vault"
       version = "~>3.20.1"
     }
+    http = {
+      source  = "hashicorp/http"
+      version = "3.4.0"
+    }
   }
 }
 
@@ -22,3 +26,5 @@ provider "aws" {
 provider "tls" {}
 
 # provider "vault" {}
+
+provider "http" {}
