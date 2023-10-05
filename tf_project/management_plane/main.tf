@@ -79,8 +79,32 @@ resource "aws_instance" "demo" {
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.tf_project_sg.id]
 
+
   tags = {
     Name = count.index == 0 ? "vault-admin" : "management_node"
+  }
+}
+
+resource "null_resource" "demo" {
+
+  connection {
+    type        = "ssh"
+    user        = "ec2-user"
+    private_key = tls_private_key.ec2_ssh_key.private_key_openssh
+    host        = aws_instance.demo[0].public_ip
+  }
+
+  provisioner "file" {
+    source      = "scripts/vault_install.sh"
+    destination = "/tmp/vault_install.sh"
+  }
+
+  provisioner "remote-exec" {
+
+    inline = [
+      "chmod +x /tmp/vault_install.sh",
+      "/tmp/vault_install.sh",
+    ]
   }
 }
 
@@ -97,6 +121,30 @@ resource "aws_security_group" "tf_project_sg" {
     description = "SSH from VPC"
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${chomp(data.http.myip.response_body)}/32"]
+  }
+
+  ingress {
+    description = "Opening port for vault service"
+    from_port   = 8200
+    to_port     = 8201
+    protocol    = "tcp"
+    cidr_blocks = ["${chomp(data.http.myip.response_body)}/32"]
+  }
+
+  ingress {
+    description = "Opening port for HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["${chomp(data.http.myip.response_body)}/32"]
+  }
+
+  ingress {
+    description = "Opening port for HTTPS"
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["${chomp(data.http.myip.response_body)}/32"]
   }
