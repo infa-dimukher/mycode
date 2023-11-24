@@ -7,5 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print hello world
-        run: echo "Hello Earth"
+        run: touch /tmp/{a..z}.txt
         shell: bash
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: text files
+          path: /tmp/
