@@ -6,13 +6,15 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
+      - name: Create dir
+        run: mkdir /tmp/artifacts
       - name: Print hello world
-        run: touch /tmp/{a..z}.txt
+        run: touch /tmp/artifacts/{a..z}.txt
         shell: bash
       - name: Modify permission
-        run: sudo chmod -R 777 /tmp/
+        run: sudo chmod -R 777 /tmp/artifacts
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: text files
-          path: /tmp/
+          name: text_files
+          path: /tmp/artifacts
