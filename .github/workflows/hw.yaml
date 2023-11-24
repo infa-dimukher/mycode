@@ -9,6 +9,8 @@ jobs:
       - name: Print hello world
         run: touch /tmp/{a..z}.txt
         shell: bash
+      - name: Modify permission
+        run: sudo chmod -R 777 /tmp/
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
